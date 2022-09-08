@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Validate } from '../../util/validate';
 
 @Component({
   selector: 'app-login',
@@ -24,18 +25,13 @@ export class LoginPage implements OnInit {
   entrar(){
     console.log('entrando...');
     console.log(this.email, this.senha);
-    if(this.validateEmail(this.email) && this.senha === this.senhaMestre)
+    if(Validate.validateEmail(this.email) && this.senha === this.senhaMestre)
       this.router.navigateByUrl('home');
     else
       alert('Dados incorretos');
   }
+ 
 
-  validateEmail(email) {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  }
+  
 
 }
