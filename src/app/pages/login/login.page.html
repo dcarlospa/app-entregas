@@ -15,7 +15,13 @@
         <p class="register">{{email}}</p>
         <p class="register">{{senha}}</p>
       <ion-button expand="block" (click)="entrar()">Entrar</ion-button>
+      <ul>
+        <li class="register" *ngFor="let produto of produtos | async">
+          {{produto.nome}} - R$ {{produto.valor}}
+        </li>
+      </ul>
     </div>
+    
   </div>
 
 </ion-content>

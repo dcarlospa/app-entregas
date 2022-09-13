@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Validate } from '../../util/validate';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,12 +13,16 @@ export class LoginPage implements OnInit {
 
   email: string = '';
   senha = '';
+  produtos : any;
   private senhaMestre = "123";
 
   constructor(
-    private router: Router
+    private router: Router,
+    firestore: AngularFirestore
   ) { 
     console.log(router.url);
+    this.produtos = firestore.collection('produtos').valueChanges();
+    console.log(this.produtos)
   }
 
   ngOnInit() {
