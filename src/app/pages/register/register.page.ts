@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Validate } from '../../util/validate';
@@ -10,6 +12,7 @@ import { Validate } from '../../util/validate';
 })
 export class RegisterPage implements OnInit {
   email: string = '';
+  nome = '';
   senha = '';
   senhaRepetida = '';
   habilitaSalvar = false;
@@ -19,6 +22,8 @@ export class RegisterPage implements OnInit {
     private alertController: AlertController,
     private toastController: ToastController,
     private loadingCtrl: LoadingController,
+    private fireAuth: AngularFireAuth,
+    public firestore: AngularFirestore,
   ) { }
 
   ngOnInit() {
@@ -34,7 +39,7 @@ export class RegisterPage implements OnInit {
   canSave(): boolean{
     return Validate.validateEmail(this.email)  && 
     this.senha===this.senhaRepetida && 
-    this.senha.length >= 3
+    this.senha.length >= 6
   }
 
   async presentAlert() {
@@ -53,22 +58,27 @@ export class RegisterPage implements OnInit {
           text: 'Sim',
           role: 'confirm',
           handler: async () => {
-            this.showLoading();
-            setTimeout( async () => {
-              await this.fecharLoading();
-            },
-            2000)
-            console.log('O leso confirmou!')
-            console.log('cadastrando...');
-            console.log(this.email, this.senha, this.senhaRepetida);
-            if(Validate.validateEmail(this.email) && this.senha === this.senhaRepetida){
-              this.presentToast('Bem vindo!');
-              this.router.navigateByUrl('home');
+            await this.showLoading();
+            try{
+              const result = await this.fireAuth.createUserWithEmailAndPassword(this.email, this.senha);
+              console.log(result);
+              const uid = result.user.uid;
+              this.firestore.collection('usuarios').doc(uid).set({email: this.email, nome: this.nome, pontos: 0, desconto: 10, endereco: '', bloqueado: false });
+              this.router.navigateByUrl('login');
+              this.presentToast('Usuário criado com sucesso. Agora faça o login para acessar o sistema!');
             }
-            else{
-              this.presentToast('Dados inválidos!');
+            catch(deuErro){
+              console.log(JSON.stringify(deuErro));
+              if(deuErro.code === 'auth/email-already-in-use'){
+                this.presentToast('Este e-mail já está sendo utilizado!');
+              }else if(deuErro.code === 'auth/weak-password'){
+                this.presentToast('Senha fraca. Tente outra senha!');
+              }else{ 
+                this.presentToast('Erro desconhecido.');
+              }
+              
             }
-            
+            await this.fecharLoading();
           }
         },
       ],

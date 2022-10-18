@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +16,13 @@ export class LoginPage implements OnInit {
   email: string = '';
   senha = '';
   produtos : any;
-  private senhaMestre = "123";
 
   constructor(
     private router: Router,
     public firestore: AngularFirestore,
     private loadingCtrl: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private fireAuth: AngularFireAuth
   ) { 
     console.log(router.url);
     firestore.collection('produtos', ref => ref.limit(10).orderBy('valor', 'desc')).valueChanges().subscribe( x => {
@@ -35,35 +36,23 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  entrar(){
+  async entrar(){
     this.showLoading();
     console.log('entrando...');
-    console.log(this.email, this.senha);
-    this.firestore.collection('usuarios', 
-      ref => ref.
-        where('email', '==', this.email).
-        where('senha', '==', this.senha).
-        where('estaAtivo', '==', true).
-        limit(6)
-      ).valueChanges().subscribe( async x => {
-        console.log(x);
-        await this.fecharLoading();
-
-        if(x.length === 1){
-          this.presentToast('Bem vindo!');
-          this.router.navigateByUrl('home');
-        }else{
-          this.presentToast('Usuário ou senha incorretos!');
-          this.router.navigateByUrl('login');
-
-        }
-      })
-    /*
-    if(Validate.validateEmail(this.email) && this.senha === this.senhaMestre)
+    //this.fireAuth.createUserWithEmailAndPassword()
+    try{
+      const result = await this.fireAuth.signInWithEmailAndPassword(this.email, this.senha);
+      console.log(result);
+      //firestore.collection(usuarios).doc(result.user.uid)
+      //if(usuario.estaAtivo===true)
+      this.presentToast('Bem vindo!');
       this.router.navigateByUrl('home');
-    else
-      alert('Dados incorretos');
-      */
+    }
+    catch(erroQueOcorreu){
+      console.log(erroQueOcorreu);
+      this.presentToast('Usuário ou senha incorretos!');
+    }
+    await this.fecharLoading();
   }
  
 

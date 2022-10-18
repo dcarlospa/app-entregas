@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +10,8 @@ import { Router } from '@angular/router';
 export class HomePage implements OnInit {
 
   constructor(
-    private gerenciadorDeRotas: Router
+    private gerenciadorDeRotas: Router,
+    private fireAuth: AngularFireAuth
   ) { }
 
   ngOnInit() {
@@ -20,6 +22,7 @@ export class HomePage implements OnInit {
     Executa toda a lógica de sair, apagando dados do usuário, etc...
     Navega para a página de login
     */
+    this.fireAuth.signOut();
     console.log('Saindo..');
     this.gerenciadorDeRotas.navigateByUrl('login');
   }
