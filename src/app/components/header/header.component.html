@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{page}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu Principal</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" name="person-outline" md="person-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Perffil</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" name="receipt-outline" md="receipt-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Pedidos</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" name="pricetags-outline" md="pricetags-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Descontos</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" name="beer-outline" md="beer-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Bebidas</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" name="fish-outline" md="fish-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Peixes</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+    <ion-menu-toggle auto-hide="true">
+      <ion-item routerDirection="forward"  lines="none" detail="false">
+        <ion-icon slot="start" ios="business-outline" md="business-sharp">
+        </ion-icon>
+        <ion-label class="ion-margin">Estabelecimentos</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+</div>
