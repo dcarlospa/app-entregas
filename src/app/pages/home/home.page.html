@@ -1,4 +1,10 @@
 <app-header page="Início"></app-header>
 <ion-content>
+  <ion-item *ngFor="let produto of produtos">
+    <!-- colocar a imagem -->
+    <ion-label>{{produto.nome}}</ion-label>
+    <img *ngIf="produto.link" [src]="produto.link" alt="">
+    <input type="file" (change)="uploadPhoto($event, produto)" >
+  </ion-item>
   <ion-button (click)="sair()" color="danger" size="small">Sair</ion-button>
 </ion-content>
